@@ -80,6 +80,7 @@ namespace LiveLogger.Pages
             // Inform blazor the UI needs updating
             StateHasChanged();
         }
+        protected override void OnInitialized() => logger.LogInformation("Browse : {0}", "/chatroom");
 
         private async Task DisconnectAsync()
         {

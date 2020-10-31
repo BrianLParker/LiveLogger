@@ -2,12 +2,10 @@
 @inject ILogger<Index> logger
 <PageLayout CssClass="app-background-gradient">
 
-<h1>Hello, world!</h1>
+    <h1>Live logging proof off concept</h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <p>Open at least one other window of the app. In one of the windows open the Log Monitor from the menu (top left). Then start using the app in any of the other windows.</p>
 </PageLayout>
 @code {
-     protected override void OnInitialized() => logger.LogInformation("Browse : {0}", "/");
+    protected override void OnInitialized() => logger.LogInformation("Browse : {0}", "/");
 }

@@ -25,6 +25,8 @@ namespace LiveLogger.Pages
         private HubConnection _hubConnection;
         protected async override Task OnInitializedAsync()
         {
+            logger.LogInformation("Browse : {0}", "/logmonitor");
+
             await base.OnInitializedAsync();
             await Chat();
         }
@@ -71,7 +73,7 @@ namespace LiveLogger.Pages
         {
             if (name != "LOGGER") return;
 
-            this._messages.Insert(0,new Message(name, message, false));
+            this._messages.Insert(0, new Message(name, message, false));
             // Inform blazor the UI needs updating
             StateHasChanged();
         }

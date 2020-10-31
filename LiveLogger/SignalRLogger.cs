@@ -30,7 +30,7 @@
             {
                 try
                 {
-                    this._config.HubContext?.Clients.Group(_config.GroupName).SendAsync("Broadcast", "LOGGER", $"{DateTimeOffset.UtcNow:T} (utc): {formatter(state, exception)}");
+                    this._config.HubContext?.Clients.Group(_config.GroupName).SendAsync("Broadcast", "LOGGER", $"{DateTimeOffset.UtcNow:T}-UTC : {formatter(state, exception)}");
                 }
                 catch { } // todo
             }
