@@ -28,10 +28,7 @@
 
             if (this._config.EventId == 0 || this._config.EventId == eventId.Id)
             {
-                if (this._config.HubContext != default)
-                {
-                    this._config.HubContext.Clients.All.SendAsync("Broadcast", "LOGGER", formatter(state, exception));
-                }
+                this._config.HubContext?.Clients.All.SendAsync("Broadcast", "LOGGER", formatter(state, exception));
             }
         }
     }
