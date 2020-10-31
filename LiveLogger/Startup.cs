@@ -33,7 +33,8 @@ namespace LiveLogger
                     new SignalRLoggerConfiguration
                     {
                         HubContext = serviceProvider.GetService<IHubContext<BlazorChatSampleHub>>(),
-                        LogLevel = LogLevel.Information
+                        LogLevel = LogLevel.Information,
+                        GroupName = "LogMonitor"
                     }));
 
             if (env.IsDevelopment())

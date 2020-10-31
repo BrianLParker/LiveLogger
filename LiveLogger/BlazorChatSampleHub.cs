@@ -8,6 +8,7 @@
     {
         public const string HubUrl = "/chat";
         public async Task Broadcast(string username, string message) => await Clients.All.SendAsync("Broadcast", username, message);
+        public async Task JoinGroup(string groupName) => await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
         public override Task OnConnectedAsync()
         {
