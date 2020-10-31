@@ -3,16 +3,11 @@
     using System;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.SignalR;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Logging;
 
     public class BlazorChatSampleHub : Hub
     {
         public const string HubUrl = "/chat";
-        public async Task Broadcast(string username, string message)
-        {            
-            await Clients.All.SendAsync("Broadcast", username, message);
-        }
+        public async Task Broadcast(string username, string message) => await Clients.All.SendAsync("Broadcast", username, message);
 
         public override Task OnConnectedAsync()
         {

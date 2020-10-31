@@ -1,24 +1,18 @@
 namespace LiveLogger
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using LiveLogger.Data;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.HttpsPolicy;
+    using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
 
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -32,8 +26,16 @@ namespace LiveLogger
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
+            loggerFactory.AddProvider(
+                new SignalRLoggerProvider(
+                    new SignalRLoggerConfiguration
+                    {
+                        HubContext = serviceProvider.GetService<IHubContext<BlazorChatSampleHub>>(),
+                        LogLevel = LogLevel.Information
+                    }));
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -56,6 +58,7 @@ namespace LiveLogger
                 endpoints.MapFallbackToPage("/_Host");
                 endpoints.MapHub<BlazorChatSampleHub>(BlazorChatSampleHub.HubUrl);
             });
+
         }
     }
 }

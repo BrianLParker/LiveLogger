@@ -2,30 +2,21 @@ namespace LiveLogger.Pages
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Components;
-    using System.Net.Http;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Components.Authorization;
-    using Microsoft.AspNetCore.Components.Forms;
-    using Microsoft.AspNetCore.Components.Routing;
-    using Microsoft.AspNetCore.Components.Web;
-    using Microsoft.JSInterop;
     using LiveLogger;
-    using LiveLogger.Shared;
+    using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.SignalR.Client;
     using Microsoft.Extensions.Logging;
 
     public partial class ChatRoom
     {
         [Inject]
-        ILogger<ChatRoom> logger { get; set; }
+        private ILogger<ChatRoom> logger { get; set; }
         // flag to indicate chat status
         private bool _isChatting = false;
 
         // name of the user who will be chatting
-        private string _username;
+        private readonly string _username;
 
         // on-screen message
         private string _message;
@@ -34,7 +25,7 @@ namespace LiveLogger.Pages
         private string _newMessage;
 
         // list of messages in chat
-        private List<Message> _messages = new List<Message>();
+        private readonly List<Message> _messages = new List<Message>();
 
         private string _hubUrl;
         private HubConnection _hubConnection;
@@ -42,48 +33,48 @@ namespace LiveLogger.Pages
         public async Task Chat()
         {
             // check username is valid
-            if (string.IsNullOrWhiteSpace(_username))
+            if (string.IsNullOrWhiteSpace(this._username))
             {
-                _message = "Please enter a name";
+                this._message = "Please enter a name";
                 return;
             };
 
             try
             {
                 // Start chatting and force refresh UI.
-                _isChatting = true;
+                this._isChatting = true;
                 await Task.Delay(1);
 
                 // remove old messages if any
-                _messages.Clear();
+                this._messages.Clear();
 
                 // Create the chat client
                 string baseUrl = navigationManager.BaseUri;
 
-                _hubUrl = baseUrl.TrimEnd('/') + BlazorChatSampleHub.HubUrl;
+                this._hubUrl = baseUrl.TrimEnd('/') + BlazorChatSampleHub.HubUrl;
 
-                _hubConnection = new HubConnectionBuilder()
-                    .WithUrl(_hubUrl)
+                this._hubConnection = new HubConnectionBuilder()
+                    .WithUrl(this._hubUrl)
                     .Build();
 
-                _hubConnection.On<string, string>("Broadcast", BroadcastMessage);
+                this._hubConnection.On<string, string>("Broadcast", BroadcastMessage);
 
-                await _hubConnection.StartAsync();
+                await this._hubConnection.StartAsync();
 
-                await SendAsync($"[Notice] {_username} joined chat room.");
+                await SendAsync($"[Notice] {this._username} joined chat room.");
             }
             catch (Exception e)
             {
-                _message = $"ERROR: Failed to start chat client: {e.Message}";
-                _isChatting = false;
+                this._message = $"ERROR: Failed to start chat client: {e.Message}";
+                this._isChatting = false;
             }
         }
 
         private void BroadcastMessage(string name, string message)
         {
-            bool isMine = name.Equals(_username, StringComparison.OrdinalIgnoreCase);
+            bool isMine = name.Equals(this._username, StringComparison.OrdinalIgnoreCase);
 
-            _messages.Add(new Message(name, message, isMine));
+            this._messages.Add(new Message(name, message, isMine));
 
             // Inform blazor the UI needs updating
             StateHasChanged();
@@ -91,25 +82,25 @@ namespace LiveLogger.Pages
 
         private async Task DisconnectAsync()
         {
-            if (_isChatting)
+            if (this._isChatting)
             {
-                await SendAsync($"[Notice] {_username} left chat room.");
+                await SendAsync($"[Notice] {this._username} left chat room.");
 
-                await _hubConnection.StopAsync();
-                await _hubConnection.DisposeAsync();
+                await this._hubConnection.StopAsync();
+                await this._hubConnection.DisposeAsync();
 
-                _hubConnection = null;
-                _isChatting = false;
+                this._hubConnection = null;
+                this._isChatting = false;
             }
         }
 
         private async Task SendAsync(string message)
         {
-            if (_isChatting && !string.IsNullOrWhiteSpace(message))
+            if (this._isChatting && !string.IsNullOrWhiteSpace(message))
             {
-                await _hubConnection.SendAsync("Broadcast", _username, message);
-                logger.LogInformation($"{_username} : {message}");
-                _newMessage = string.Empty;
+                await this._hubConnection.SendAsync("Broadcast", this._username, message);
+                logger.LogInformation($"{this._username} : {message}");
+                this._newMessage = string.Empty;
             }
         }
 

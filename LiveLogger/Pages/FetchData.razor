@@ -1,5 +1,5 @@
 ﻿@page "/fetchdata"
-
+@inject ILogger<FetchData> logger
 @using LiveLogger.Data
 @inject WeatherForecastService ForecastService
 
@@ -42,5 +42,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        logger.LogInformation($"{forecasts.Length} forecasts retrieved");
     }
 }
