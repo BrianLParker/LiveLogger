@@ -2,6 +2,9 @@
 @inject NavigationManager navigationManager
 @using Microsoft.AspNetCore.SignalR.Client;
 
+
+<PageContainer class="bg-white p-1 rounded shadow">
+    
 <h1>Log Monitor</h1>
 <hr />
 
@@ -18,20 +21,23 @@ else
         <button class="btn btn-sm btn-warning ml-md-auto" @onclick="@DisconnectAsync">Disconnect</button>
     </div>
     // display messages
+    <ScrollDiv>
     <div id="scrollbox">
         @foreach (var item in _messages)
         {
             @if (item.IsNotice)
             {
-                <div class="alert alert-info">@item.Body</div>
+                <div @key="@item" class="alert alert-info">@item.Body</div>
             }
             else
             {
-                <div class="@item.CSS">
+                <div @key="@item" class="@item.CSS">
                     <div class="user">@item.Username</div>
                     <div class="msg">@item.Body</div>
                 </div>
             }
         }
     </div>
+    </ScrollDiv>
 }
+</PageContainer>

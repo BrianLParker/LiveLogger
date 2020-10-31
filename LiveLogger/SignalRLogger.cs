@@ -28,7 +28,11 @@
 
             if (this._config.EventId == 0 || this._config.EventId == eventId.Id)
             {
-                this._config.HubContext?.Clients.Group(_config.GroupName).SendAsync("Broadcast", "LOGGER", formatter(state, exception));
+                try
+                {
+                    this._config.HubContext?.Clients.Group(_config.GroupName).SendAsync("Broadcast", "LOGGER", $"{DateTimeOffset.UtcNow:T} (utc): {formatter(state, exception)}");
+                }
+                catch { } // todo
             }
         }
     }

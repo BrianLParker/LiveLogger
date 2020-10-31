@@ -1,15 +1,21 @@
 ﻿@inherits LayoutComponentBase
-
-<div class="sidebar">
-    <NavMenu />
-</div>
-
-<div class="main">
-    <div class="top-row px-4">
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-    </div>
-
-    <div class="content px-4">
+<CleanLayout CopyrightOwner="<Your Name>" CopyrightStart="1936">
+    <HeaderCenter>
+        <AppHeader />
+    </HeaderCenter>
+    <LeftMenuPanel>
+        <NavMenuLeft />
+    </LeftMenuPanel>
+    <LeftIcon>
+        <span class="oi oi-grid-three-up text-shadow" aria-hidden="true"></span>
+    </LeftIcon>
+@*    <RightIcon>
+        <span class="oi oi-cog text-shadow" aria-hidden="true"></span>
+    </RightIcon>
+    <RightMenuPanel>
+        <NavMenuRight />
+    </RightMenuPanel>
+*@    <Content>
         @Body
-    </div>
-</div>
+    </Content>
+</CleanLayout>

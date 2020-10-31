@@ -75,7 +75,7 @@ namespace LiveLogger.Pages
         {
             bool isMine = name.Equals(this._username, StringComparison.OrdinalIgnoreCase);
 
-            this._messages.Add(new Message(name, message, isMine));
+            this._messages.Insert(0, new Message(name, message, isMine));
 
             // Inform blazor the UI needs updating
             StateHasChanged();
@@ -118,7 +118,7 @@ namespace LiveLogger.Pages
             public bool Mine { get; set; }
             public bool IsNotice => Body.StartsWith("[Notice]");
             public bool IsLog => Username == "LOGGER";
-            public string CSS => Mine ? "sent" : ( IsLog ? "log" : "received");
+            public string CSS => Mine ? "sent" : (IsLog ? "log" : "received");
         }
     }
 }

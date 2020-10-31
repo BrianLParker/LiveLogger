@@ -1,6 +1,7 @@
 ﻿@page "/chatroom"
 @inject NavigationManager navigationManager
 @using Microsoft.AspNetCore.SignalR.Client;
+<PageContainer class="bg-white p-3 rounded shadow">
 
 <h1>Blazor SignalR Chat Sample</h1>
 <hr />
@@ -10,10 +11,10 @@
     <p>
         Enter your name to start chatting:
     </p>
-
+    <div>
     <input type="text" maxlength="32" @bind="@_username" />
     <button type="button" @onclick="@Chat"><span class="oi oi-chat" aria-hidden="true"></span> Chat!</button>
-
+    </div>
     // Error messages
     @if (_message != null)
     {
@@ -30,23 +31,28 @@ else
         <button class="btn btn-sm btn-warning ml-md-auto" @onclick="@DisconnectAsync">Disconnect</button>
     </div>
     // display messages
-    <div id="scrollbox">
+      <ScrollDiv>
+    <div style="margin:0 20px">
+        <div>
+        <textarea class="input-lg" placeholder="enter your comment" @bind="@_newMessage"></textarea>
+        <button class="btn btn-default" @onclick="@(() => SendAsync(_newMessage))">Send</button>
+        </div>
+        <hr />
         @foreach (var item in _messages)
         {
             @if (item.IsNotice)
             {
-                <div class="alert alert-info">@item.Body</div>
+                <div @key="@item" class="alert alert-info">@item.Body</div>
             }
             else
             {
-                <div class="@item.CSS">
+                <div @key="@item" class="@item.CSS">
                     <div class="user">@item.Username</div>
                     <div class="msg">@item.Body</div>
                 </div>
             }
         }
-        <hr />
-        <textarea class="input-lg" placeholder="enter your comment" @bind="@_newMessage"></textarea>
-        <button class="btn btn-default" @onclick="@(() => SendAsync(_newMessage))">Send</button>
     </div>
+    </ScrollDiv>
 }
+</PageContainer>

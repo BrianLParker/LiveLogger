@@ -18,9 +18,6 @@ namespace LiveLogger.Pages
         // on-screen message
         private string _message;
 
-        // new message input
-        private string _newMessage;
-
         // list of messages in chat
         private readonly List<Message> _messages = new List<Message>();
 
@@ -72,9 +69,9 @@ namespace LiveLogger.Pages
 
         private void BroadcastMessage(string name, string message)
         {
+            if (name != "LOGGER") return;
 
-
-            this._messages.Add(new Message(name, message, false));
+            this._messages.Insert(0,new Message(name, message, false));
             // Inform blazor the UI needs updating
             StateHasChanged();
         }
