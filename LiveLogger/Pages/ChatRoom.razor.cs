@@ -116,10 +116,9 @@ namespace LiveLogger.Pages
             public string Username { get; set; }
             public string Body { get; set; }
             public bool Mine { get; set; }
-
             public bool IsNotice => Body.StartsWith("[Notice]");
-
-            public string CSS => Mine ? "sent" : "received";
+            public bool IsLog => Username == "LOGGER";
+            public string CSS => Mine ? "sent" : ( IsLog ? "log" : "received");
         }
     }
 }
