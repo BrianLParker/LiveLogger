@@ -16,7 +16,7 @@ namespace LiveLogger.Pages
         private bool _isChatting = false;
 
         // name of the user who will be chatting
-        private readonly string _username;
+        private string _username;
 
         // on-screen message
         private string _message;
@@ -60,12 +60,13 @@ namespace LiveLogger.Pages
                 this._hubConnection.On<string, string>("Broadcast", BroadcastMessage);
 
                 await this._hubConnection.StartAsync();
-
                 await SendAsync($"[Notice] {this._username} joined chat room.");
+                logger.LogInformation("Join chat room {0}", this._username);
             }
             catch (Exception e)
             {
                 this._message = $"ERROR: Failed to start chat client: {e.Message}";
+                logger.LogInformation(this._message);
                 this._isChatting = false;
             }
         }
@@ -99,7 +100,6 @@ namespace LiveLogger.Pages
             if (this._isChatting && !string.IsNullOrWhiteSpace(message))
             {
                 await this._hubConnection.SendAsync("Broadcast", this._username, message);
-                logger.LogInformation($"{this._username} : {message}");
                 this._newMessage = string.Empty;
             }
         }
